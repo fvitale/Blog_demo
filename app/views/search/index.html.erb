@@ -1,0 +1,43 @@
+<title> Search Posts </title>
+<%= stylesheet_link_tag "search", :media => "all" %>
+
+<h1>Search Posts</h1>
+
+<div class="search">
+	<%= form_tag "search_by_fields", :remote=>true do%>
+	 	<div class="column">
+	 		<div class="field">
+	  	<%= label_tag :tag %>
+	  	<%= text_field_tag :tag %>
+	  	</div>
+	 	</div>
+	 	<div class="column">
+	 		<div class="field">
+	  	<%= label_tag :post_date %>
+	  	<%= text_field_tag :post_date %>
+	  	</div>
+	 	</div>
+	 	<div class="column">
+	 		<div class="field">
+	 		<%= label_tag :keyword %>
+	  	<%= text_field_tag :keyword %>
+	  	</div>
+	 	</div>
+
+	 	<div class = "actions">
+	 		<%= submit_tag("Search") %>
+	 	</div><br>
+		<p id="notice"><%= flash[:notice] %></p>
+	<% end %>
+</div><br>
+<div class = "box_content post_content">
+	<table>
+	  <thead>
+	    <th>User</th>
+	    <th>Title</th>
+	    <th>Content</th>
+	  </thead>
+		<tbody id="div_posts">
+		</tbody>
+	</table>
+</div>

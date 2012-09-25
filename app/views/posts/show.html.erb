@@ -1,0 +1,88 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @post.user_id %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%= @post.title %>
+</p>
+<%= image_tag @post.image.url(:medium) %>
+
+<p>
+  <b>Content:</b>
+  <%= @post.content %>
+</p>
+<p>
+  <b>Tags:</b>
+    <% tags =@post.tag_counts.order() %>
+    <% tags.uniq.each do |t| %>
+      <%= link_to t.name, tag_path(t.id), :class => "linkTag"%>
+    <% end%>
+</p>
+
+
+<% if(current_user.id == @post.user_id) %>
+  <%= link_to 'Edit', edit_user_post_path(current_user.id,@post) %> | 
+<% end%>  
+<%= link_to 'Back', user_path(current_user) %>
+<p>----------------------------------<%=t('comments.new_comment')%>-----------------------------</p>
+<p>------------------------------------------------------------------------------------</p>
+<%= form_for([@user,@post,@comment]) do |f| %>
+  <% if @comment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
+
+      <ul>
+      <% @comment.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= f.label :content %><br />
+    <%= f.text_field :content %>
+  </div>
+  <div class="actions">
+    <%= f.submit t('comments.create_comment') %>
+  </div>
+<% end %><br><br><br>
+<p>------------------------------------Comentarios----------------------------------</p>
+<p>------------------------------------------------------------------------------------</p>
+<table>
+  <tr>
+    <th>User</th>
+    <th>Content</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @post.comments.reverse.each do |comment| %>
+  <tr>
+    <td><%= comment.user_id %></td>
+    <td><%= comment.content %></td>
+    <td>
+        <%= 
+        if(current_user.id==comment.user_id) 
+              link_to 'Edit', edit_user_post_comment_path(@user, @post, comment) 
+        end
+        %>
+    </td>
+    <td>
+      <%= 
+      if(current_user.id==comment.user_id)
+        link_to 'Destroy', [@user,@post,comment], confirm: t('posts.confirm'), method: :delete
+      else
+        if (current_user.id==comment.post_id)
+          link_to 'Destroy', [@user,@post,comment], confirm: t('posts.confirm'), method: :delete
+        end
+      end
+      %>
+    </td>
+  </tr>
+<% end %>
+</table>
+
